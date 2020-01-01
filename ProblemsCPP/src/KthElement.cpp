@@ -5,60 +5,57 @@
  *      Author: Yu
  */
 
+/*
+ * Find the kth largest element in an unsorted array.
+ */
+
 #include <iostream>
 #include <cassert>
 #include "utils.h"
 
 using namespace std;
 
-static void swapElements(int *array, int idx1, int idx2)
-{
-  int tmp = array[idx1];
-  array[idx1] = array[idx2];
-  array[idx2] = tmp;
-}
-
-static int partition(int *array, int start, int len)
+// Returns size of "greater" section, including pivot
+static int partition(vector<int>& nums, int start, int len)
 {
   if (len <= 0)
     return 0;
-  int pivot = array[start];
-  int idx1 = start, idx2 = start + len - 1;
-  while (idx1 < idx2) {
-    while (array[idx1] <= pivot && idx1 < idx2)
-      ++idx1;
-    while (array[idx2] > pivot && idx1 < idx2)
-      --idx2;
-    swapElements(array, idx1, idx2);
+  int pivot = nums[start];
+  int largeIdx = start; // point at the last large number idx
+  for (int i = start + 1; i < start + len; ++i) {
+    if (pivot <= nums[i]) {
+      ++largeIdx;
+      swap(nums[largeIdx], nums[i]);
+    }
   }
-  if (array[idx1] > pivot)
-    --idx1;
-  swapElements(array, start, idx1);
-
-  return idx1 - start + 1;
+  // Make pivot the last one in "greater" section, since all others are >= pivot
+  swap(nums[start], nums[largeIdx]);
+  return largeIdx - start + 1;
 }
 
-static int findKth(int *array, int start, int len, int k)
+static int findKth(vector<int>& nums, int start, int len, int k)
 {
-  assert(k > 0);
-  int lessCount = partition(array, start, len);
-  if (lessCount == k)
-    return array[start + k - 1];
+    int greaterCount = partition(nums, start, len);
+    if (greaterCount == k)
+        return nums[start + k - 1];
 
-  if (lessCount > k)
-    return findKth(array, start, lessCount, k);
-  else
-    return findKth(array, start+lessCount, len-lessCount, k-lessCount);
+    if (greaterCount > k)
+        return findKth(nums, start, greaterCount-1, k);
+    else
+        return findKth(nums, start+greaterCount, len-greaterCount, k-greaterCount);
 }
 
-
-void testKthElement()
+int findKthLargest(vector<int>& nums, int k)
 {
-  int array[] = {5, 62, -1, -5, -4, 33, 24};
-  int array_len = sizeof(array)/sizeof(array[0]);
-  //int lessCount = partition(array, 0, array_len);
-  //showArray(array, array_len);
-  //cout << "lessCount=" << lessCount << endl;
-  for (int i = 0; i < array_len; ++i)
-    cout << findKth(array, 0, array_len, i+1) << endl;
+    return findKth(nums, 0, nums.size(), k);
+}
+
+int main(void)
+{
+    vector<int> input1{3,2,1,5,6,4};
+    vector<int> input2{3,2,3,1,2,4,5,5,6};
+    cout << findKthLargest(input1, 2) << endl;
+    cout << findKthLargest(input2, 4) << endl;
+
+    return 0;
 }
