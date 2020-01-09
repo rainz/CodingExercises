@@ -98,8 +98,30 @@ void testSorting()
 
 }
 
+void testRef()
+{
+    vector<int> v1, v2;
+    vector<int>& ref = v1;
+    v1.push_back(11);
+    v1.push_back(12);
+    v2.push_back(21);
+    v2.push_back(22);
+    for (auto it = v1.begin(); it != v1.end(); ++it)
+        cout << *it << ",";
+    cout << endl;
+    ref = v2; // this actually assigned v2 to v1 !!!!!! 
+    ref.push_back(999); // appended to v1 !!! v2 not unchanged !!!
+    for (auto it = v1.begin(); it != v1.end(); ++it)
+        cout << *it << ",";
+    cout << endl;
+    for (auto it = v2.begin(); it != v2.end(); ++it)
+        cout << *it << ",";
+    cout << endl;
+}
+
 int main(void)
 {
-    testSorting();
+    //testSorting();
+    testRef();
     return 0;
 }
