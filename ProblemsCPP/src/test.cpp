@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include <vector>
 #include <queue>
 #include <map>
@@ -119,9 +122,45 @@ void testRef()
     cout << endl;
 }
 
+void testMove()
+{
+    vector<int> v1{1,2,3,4,5};
+    vector<int> v2{10,20};
+    v2 = move(v1);
+    printVector(v1);
+    printVector(v2);
+}
+
+void testFile()
+{
+    string homepath = getenv("HOME");
+    string filepath = homepath + "/text.txt";
+    cerr << "Opening " << filepath << endl;
+    ifstream infile;
+    infile.open(filepath);
+    if (!infile) {
+        cerr << "bad file" << endl;
+        return;
+    }
+    ofstream outfile;
+    outfile.open(homepath + "/out.txt");
+    string line;
+    while (getline(infile, line)) {
+        istringstream iss(line);
+        string field;
+        while (getline(iss, field, ','))
+            outfile << field << "|";
+        outfile << endl;
+    }
+    infile.close();
+    outfile.close();
+}
+
 int main(void)
 {
     //testSorting();
-    testRef();
+    //testRef();
+    //testMove();
+    //testFile();
     return 0;
 }

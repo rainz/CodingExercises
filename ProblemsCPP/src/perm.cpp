@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <set>
 
 using namespace std;
@@ -58,4 +59,62 @@ void testPerm()
     }
     cout << endl;
   }
+}
+
+/*
+ * Given string which contains only '<' and/or '>', Insert numbers 1 to n such that all comparisons are true
+ * (only return one if multiple results exist)
+ * Example:
+ * Input: "><>><"
+ * Output: "6>2<5>4>1<3"
+ */
+bool perm_order_helper(vector<int> &nums, int start, const string &order) {
+  if (start == nums.size())
+    return true;
+  for (int i = start; i < nums.size(); ++i) {
+    int numS = nums[start];
+    int numI = nums[i];
+    bool canSwap = start == 0;
+    if (!canSwap) {
+      char cmp = order[start-1];
+      if (cmp == '>' && nums[start-1] > numI)
+        canSwap = true;
+      else if (cmp == '<' && nums[start-1] < numI)
+        canSwap = true;
+    }
+    if (!canSwap)
+      continue;
+    nums[start] = numI;
+    nums[i] = numS;
+    if (perm_order_helper(nums, start+1, order))
+      return true;
+    nums[start] = numS;
+    nums[i] = numI;
+  }
+  return false;
+}
+
+string perm_order(const string &order) {
+  int N = order.length() + 1;
+  vector<int> nums;
+  for (int i = 1; i <= N; ++i)
+    nums.push_back(i);
+  perm_order_helper(nums, 0, order);
+  string ans;
+  ans += to_string(nums[0]);
+  for (int i = 1; i < N; ++i) {
+    ans += order[i-1];
+    ans += to_string(nums[i]);
+  }
+  return ans;
+}
+void test_perm_order() {
+  string s = "><>><";
+  string ans = perm_order(s);
+  cout << ans << endl;
+}
+
+int main(void) {
+  test_perm_order();
+  return 0;
 }
