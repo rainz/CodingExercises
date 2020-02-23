@@ -78,7 +78,7 @@ void divisorPairs() {
         int n = it->first;
         int sum = it->second;
         if (n != sum && divisorMap.count(sum) > 0 && divisorMap.at(sum) == n)
-            cout << "Pair: " << n << ", " << sum << endl;
+            cout << "Pair: " << n << ", " << sum << endl; // 284 220
     }
 }
 

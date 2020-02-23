@@ -109,14 +109,17 @@ void testRef()
     v1.push_back(12);
     v2.push_back(21);
     v2.push_back(22);
+    cout << "v1: ";
     for (auto it = v1.begin(); it != v1.end(); ++it)
         cout << *it << ",";
     cout << endl;
     ref = v2; // this actually assigned v2 to v1 !!!!!! 
-    ref.push_back(999); // appended to v1 !!! v2 not unchanged !!!
+    ref.push_back(999); // appended to v1 !!! v2 not changed !!!
+    cout << "v1 after ref assign: ";
     for (auto it = v1.begin(); it != v1.end(); ++it)
         cout << *it << ",";
     cout << endl;
+    cout << "v2 after ref assign: ";
     for (auto it = v2.begin(); it != v2.end(); ++it)
         cout << *it << ",";
     cout << endl;
@@ -159,7 +162,7 @@ void testFile()
 int main(void)
 {
     //testSorting();
-    //testRef();
+    testRef();
     //testMove();
     //testFile();
     return 0;
